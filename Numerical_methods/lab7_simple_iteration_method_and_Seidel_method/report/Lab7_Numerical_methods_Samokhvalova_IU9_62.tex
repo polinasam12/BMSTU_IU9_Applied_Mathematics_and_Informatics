@@ -1,0 +1,359 @@
+\documentclass [12pt]{article}
+
+
+\usepackage{ucs}
+\usepackage[utf8x]{inputenc} %Поддержка UTF8
+\usepackage{cmap} % Улучшенный поиск русских слов в полученном pdf-файле
+\usepackage[english,russian]{babel} %Пакет для поддержки русского и английского языка
+\usepackage{graphicx} %Поддержка графиков
+\usepackage{float} %Поддержка float-графиков
+\usepackage[left=20mm,right=15mm, top=20mm,bottom=20mm,bindingoffset=0cm]{geometry}
+\usepackage{mathtools}
+\usepackage{setspace,amsmath}
+\usepackage{amsmath,amssymb}
+\usepackage{dsfont}
+\usepackage{tabularx}
+\DeclarePairedDelimiter{\abs}{\lvert}{\rvert}
+\renewcommand{\baselinestretch}{1.2}
+
+\usepackage{color}
+\definecolor{deepblue}{rgb}{0,0,0.5}
+\definecolor{deepred}{rgb}{0.6,0,0}
+\definecolor{deepgreen}{rgb}{0,0.5,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+
+\DeclareFixedFont{\ttb}{T1}{txtt}{bx}{n}{12} % for bold
+\DeclareFixedFont{\ttm}{T1}{txtt}{m}{n}{12}  % for normal
+
+\usepackage{listings}
+
+
+\lstset{
+	language=Python,
+	basicstyle=\ttm,
+	otherkeywords={self},             % Add keywords here
+	keywordstyle=\ttb\color{deepblue},
+	emph={MyClass,__init__},          % Custom highlighting
+	emphstyle=\ttb\color{deepred},    % Custom highlighting style
+	stringstyle=\color{deepgreen},
+	frame=tb,                         % Any extra options here
+	showstringspaces=false            %
+}
+
+\usepackage{hyperref}
+\usepackage{wasysym}
+
+\hypersetup{
+    bookmarks=true,         % show bookmarks bar?
+    unicode=false,          % non-Latin characters in Acrobat’s bookmarks
+    pdftoolbar=true,        % show Acrobat’s toolbar?
+    pdfmenubar=true,        % show Acrobat’s menu?
+    pdffitwindow=false,     % window fit to page when opened
+    pdfstartview={FitH},    % fits the width of the page to the window
+    pdftitle={My title},    % title
+    pdfauthor={Author},     % author
+    pdfsubject={Subject},   % subject of the document
+    pdfcreator={Creator},   % creator of the document
+    pdfproducer={Producer}, % producer of the document
+    pdfkeywords={keyword1} {key2} {key3}, % list of keywords
+    pdfnewwindow=true,      % links in new PDF window
+    colorlinks=true,       % false: boxed links; true: colored links
+    linkcolor=black,          % color of internal links (change box color with linkbordercolor)
+    citecolor=green,        % color of links to bibliography
+    filecolor=magenta,      % color of file links
+    urlcolor=cyan           % color of external links
+}
+
+
+\title{}
+\date{}
+\author{}
+
+\begin{document}
+\begin{titlepage}
+\thispagestyle{empty}
+\begin{center}
+Федеральное государственное бюджетное образовательное учреждение высшего профессионального образования \\Московский государственный технический университет имени Н.Э. Баумана
+
+\end{center}
+\bigskip
+\begin{flushleft}
+Факультет: \underline{Информатика и системы управления}\\
+Кафедра: \underline{Теоретическая информатика и компьютерные технологии}
+\end{flushleft}
+\vfill
+\centerline{\large{Лабораторная работа №7}}
+\centerline{\large{по курсу <<Численные методы>>}}
+\centerline{\large{<<Решение системы линейных алгебраических уравнений}}
+\centerline{\large{методом простой итерации и методом Зейделя>>}}
+\vfill
+\hfill\parbox{5cm} {
+           Выполнила:\\
+           студентка группы ИУ9-62Б \hfill \\
+           Самохвалова П. С.\hfill \medskip\\
+           Проверила:\\
+           Домрачева А. Б.\hfill
+       }
+\centerline{Москва, 2023}
+\clearpage
+\end{titlepage}
+
+\textsc{\textbf{Цель:}}
+
+Анализ метода простой итерации и метода Зейделя для решения системы линейных алгебраических уравнений.
+
+\textsc{\textbf{Постановка задачи:}}
+
+\textbf{Дано:}  $Ax = b$, $x = (x_{i})$, $b = (b_{i})$, $A = (a_{ij})$, $i,j=\overline{1,n}$.
+
+\textbf{Найти:} $x = (x_{i})$.
+
+\textbf{Тестовый пример:}
+
+Вариант 21
+
+\[
+    A =
+    \begin{pmatrix}
+      10.0 + \alpha & -1.0 & 0.2 & 2.0\\
+      1.0 & 12.0 - \alpha & -2.0 & 0.1\\
+      0.3 & -4.0 & 12.0 - \alpha & 1.0\\
+      0.2 & -0.3 & -0.5 & 8.0 - \alpha
+    \end{pmatrix}
+\]
+\[
+  b =
+  \begin{pmatrix}
+    1.0 + \beta \\
+    2.0 - \beta \\
+    3.0 \\
+    1.0
+  \end{pmatrix}
+\]
+$$\alpha = 0.1 * 21, \quad \beta = 0.1 * 21$$
+
+\textbf{Задание:}
+
+\begin{enumerate}
+    \item Решить систему методом простой итерации с относительной погрешностью 0.01:\\
+    а) преобразовать систему к виду x = Fx + c, распечатать матрицу F и столбец c;\\
+    б) найти норму ||F||;\\
+    в) Для каждой итерации распечатать абсолютную и относительную ошибки.
+    \item Решить систему методом Зейделя, обеспечить $||x^k - x^{k - 1}|| \leq 10^{-4}$
+\end{enumerate}
+
+\textbf{Описание методов:}\\
+
+Преобразуем исходную СЛАУ к виду $x = Fx + c$, $x = (x_{i})$, $c = (c_{i})$, $F = (f_{ij})$, $i,j=\overline{1,n}$.
+
+Зададимся некоторым начальным приближением к решению $x^0 = (x_{1}^0,...,x_{n}^0)^T$. Используя метод простой итерации каждое последующее приближение (итерацию) находим по предыдущему: $$ x^k = Fx^{k-1} + c, \quad k = 1,2,....$$
+
+Последовательность приближений сходится к точному решению $$ \lim_{k\to \inf} x^k = x,$$ если какая-либо норма матрицы F меньше единицы, например, $$ ||F|| = \max_{1 \leq i \leq n} \sum_{j = 1}^{n} |f_{ij}| < 1.$$
+При этом абсолютная погрешность очередной итерации $$ \Delta_{k} \leq \frac{||F||}{1 - ||F||}||x^k - x^{k-1}||,$$ а относительная погрешность - $$ \delta_{k} = \frac{\Delta_{k}}{||x^k||},$$ где $ ||x^k|| = \max_{1 \leq i \leq n} |x_{i}^k|$.
+
+Всякую невырожденную систему Ax = b можно привести к виду x = Fx + c, для которого ||F|| < 1 и метод простой итерации сходится.
+
+Если для всех строк $|a_{ii}| > \sum\limits_{j \neq i}{|a_{ij}|}, \quad i = \overline{1,n}$ (диагональные элементы превалируют) , то для приведения к требуемому виду достаточно разрешить каждое уравнение системы относительно ведущей неизвестной. Тогда
+\begin{equation*}
+    f_{ij} =
+    \begin{cases}
+       0 &\text{, i = j}\\
+       -\frac{a_{ij}}{a_{ii}} &\text{, $i \neq j$}
+    \end{cases}
+\end{equation*}
+и $ c_{i} = \frac{b_{i}}{a_{ii}}, \quad i,j = \overline{1,n}; \quad ||F|| < 1 $.
+
+Метод Зейделя является модификацией метода простой итерации и сходится, как правило, быстрее. Для того, чтобы решить СЛАУ методом Зейделя неободимо представить матрицу F как сумму нижнетреугольной матрицы $F_{d}$ и верхнетреугольной матрицы $F_{u}$.
+
+Тогда k-ая итерация метода будет удовлетворять рекуррентному соотношению $$ x^k = F_{d}x^k + F_{u}x^{k-1} + c, \quad k = 1,2,....$$
+
+Листинг 1. Решение СЛАУ методом простой итерации и методом Зейлеля
+
+\begin{lstlisting}[language=python]
+def norm_v(x):
+    norm = 0
+    n = len(x)
+    for i in range(n):
+        if abs(x[i]) > norm:
+            norm = abs(x[i])
+    return norm
+
+
+def sub_v(x, y):
+    n = len(x)
+    sub = [0] * n
+    for i in range(n):
+        sub[i] = x[i] - y[i]
+    return sub
+
+
+def sum_v(x, y):
+    n = len(x)
+    sum = [0] * n
+    for i in range(n):
+        sum[i] = x[i] + y[i]
+    return sum
+
+
+def mul_mv(a, x):
+    n = len(x)
+    mul = [0] * n
+    for i in range(n):
+        for j in range(n):
+            mul[i] += a[i][j] * x[j]
+    return mul
+
+
+k = 21
+a = 0.1 * k
+b = 0.1 * k
+am = [[10.0 + a, -1.0, 0.2, 2.0],
+      [1.0, 12.0 - a, -2.0, 0.1],
+      [0.3, -4.0, 12.0 - a, 1.0],
+      [0.2, -0.3, -0.5, 8.0 - a]]
+bm = [1.0 + b, 2.0 - b, 3.0, 1.0]
+
+n = 4
+
+fm = [[0] * n for i in range(n)]
+cm = [0] * n
+
+for i in range(n):
+    for j in range(n):
+        if i != j:
+            fm[i][j] = -am[i][j] / am[i][i]
+for i in range(n):
+    cm[i] = bm[i] / am[i][i]
+
+print("F =")
+for i in range(n):
+    for j in range(n):
+        print("{:24} ".format(str(fm[i][j])), end = "")
+    print()
+print()
+
+print("c =")
+for i in range(n):
+    print("{:24}".format(str(cm[i])))
+print()
+
+fm_norm = 0
+for i in range(n):
+    s = 0
+    for j in range(n):
+        s += abs(fm[i][j])
+    if s > fm_norm:
+        fm_norm = s
+
+print("||F|| =", fm_norm)
+print()
+
+k = 0
+xk = cm[:]
+otn_delta = 1
+
+print("A simple iteration method with a relative error of 0.01")
+print()
+
+while otn_delta > 0.01:
+    k += 1
+    xk_last = xk[:]
+    xk = sum_v(mul_mv(fm, xk_last), cm)
+    abs_delta = norm_v(sub_v(xk, xk_last))
+    otn_delta = abs_delta / norm_v(xk)
+    print("{:4} {:24} {:24}".format(str(k), str(abs_delta), str(otn_delta)))
+
+print()
+
+fd = [[0] * n for i in range(n)]
+fu = [[0] * n for i in range(n)]
+
+for i in range(n):
+    for j in range(n):
+        if j < i:
+            fd[i][j] = fm[i][j]
+
+for i in range(n):
+    for j in range(n):
+        if i <= j:
+            fu[i][j] = fm[i][j]
+
+print("Seidel's method with an absolute error of 0.0001")
+print()
+
+k = 0
+xk = cm[:]
+abs_delta = 1
+
+while abs_delta > 0.0001:
+    k += 1
+    xk_last = xk[:]
+    xk = mul_mv(fu, xk_last)
+    xk = mul_mv(fd, xk)
+    xk = sum_v(xk, cm)
+    abs_delta = norm_v(sub_v(xk, xk_last))
+    otn_delta = abs_delta / norm_v(xk)
+    print("{:4} {:24} {:24}".format(str(k), str(abs_delta), str(otn_delta)))
+
+\end{lstlisting}
+
+
+\textsc{\textbf{Результаты работы:}}
+
+\[
+    F =
+    \begin{pmatrix}
+      0 & 0.08264462809917356 & -0.01652892561983471 & -0.1652892561983471\\
+      -0.10101010101010101 & 0 & 0.20202020202020202 & -0.010101010101010102\\
+      -0.0303030303030303 & 0.40404040404040403 & 0 & -0.10101010101010101\\
+      -0.03389830508474576 & 0.05084745762711864 & 0.0847457627118644 & 0
+    \end{pmatrix},
+\]
+\[
+  c =
+  \begin{pmatrix}
+    0.25619834710743805 \\
+    -0.010101010101010109 \\
+    0.30303030303030304 \\
+    0.1694915254237288
+  \end{pmatrix},
+\]
+$||F|| = 0.5353535353535354$.
+
+Таблица погрешностей, получаемых на каждой итерации при решении СЛАУ методом простой итерации с относительной погрешностью 0.01:
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+Номер итерации & Абсолютная погрешность & Относительная погрешность \\
+\hline
+1 & 0.03385868773177919 & 0.12354248038332181\\
+\hline
+2 & 0.01294805238429747 & 0.04511309071213607\\
+\hline
+3 & 0.0025578023329712873 & 0.008946285079489141\\
+\hline
+\end{tabular}
+\end{center}
+
+Таблица погрешностей, получаемых на каждой итерации при решении СЛАУ методом Зейделя с абсолютной погрешностью 0.0001:
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+Номер итерации & Абсолютная погрешность & Относительная погрешность \\
+\hline
+1 & 0.02506893293170409 & 0.07640655687051644\\
+\hline
+2 & 0.0020527513408289955 & 0.006217594985869593\\
+\hline
+3 & 0.00016866968910478342 & 0.0005106241027756813\\
+\hline
+4 & 1.3853778181194265e-05 & 4.193863411030351e-05\\
+\hline
+\end{tabular}
+\end{center}
+
+
+\textbf{Выводы:}
+
+В результате выполнения лабораторной работы был изучен метод простой итерации и метод Зейделя решения системы линейных алгебраических уравнений, была написана реализация на языке программирования Python. При применении метода простой итерации к тестовому примеру потребовались 3 итерации для достижения относительной погрешности 0.01. На 3 итерации абсолютная погрешность составила 0.0025578023329712873, относительная погрешность составила 0.008946285079489141. При применении метода Зейделя к тестовому примеру потребовались 4 итерации для достижения абсолютной погрешности 0.0001. На 4 итерации абсолютная погрешность составила 1.3853778181194265e-05, относительная погрешность составила 4.193863411030351e-05.
+\end{document}

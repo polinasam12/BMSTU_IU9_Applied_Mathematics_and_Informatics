@@ -1,0 +1,224 @@
+\documentclass [12pt]{article}
+
+
+\usepackage{ucs}
+\usepackage[utf8x]{inputenc} %Поддержка UTF8
+\usepackage{cmap} % Улучшенный поиск русских слов в полученном pdf-файле
+\usepackage[english,russian]{babel} %Пакет для поддержки русского и английского языка
+\usepackage{graphicx} %Поддержка графиков
+\usepackage{float} %Поддержка float-графиков
+\usepackage[left=20mm,right=15mm, top=20mm,bottom=20mm,bindingoffset=0cm]{geometry}
+\usepackage{mathtools}
+\usepackage{setspace,amsmath}
+\usepackage{amsmath,amssymb}
+\usepackage{dsfont}
+\usepackage{tabularx}
+\DeclarePairedDelimiter{\abs}{\lvert}{\rvert}
+\renewcommand{\baselinestretch}{1.2}
+
+\usepackage{color}
+\definecolor{deepblue}{rgb}{0,0,0.5}
+\definecolor{deepred}{rgb}{0.6,0,0}
+\definecolor{deepgreen}{rgb}{0,0.5,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+
+\DeclareFixedFont{\ttb}{T1}{txtt}{bx}{n}{12} % for bold
+\DeclareFixedFont{\ttm}{T1}{txtt}{m}{n}{12}  % for normal
+
+\usepackage{listings}
+
+
+\lstset{
+	language=Python,
+	basicstyle=\ttm,
+	otherkeywords={self},             % Add keywords here
+	keywordstyle=\ttb\color{deepblue},
+	emph={MyClass,__init__},          % Custom highlighting
+	emphstyle=\ttb\color{deepred},    % Custom highlighting style
+	stringstyle=\color{deepgreen},
+	frame=tb,                         % Any extra options here
+	showstringspaces=false            %
+}
+
+\usepackage{hyperref}
+\usepackage{wasysym}
+
+\hypersetup{
+    bookmarks=true,         % show bookmarks bar?
+    unicode=false,          % non-Latin characters in Acrobat’s bookmarks
+    pdftoolbar=true,        % show Acrobat’s toolbar?
+    pdfmenubar=true,        % show Acrobat’s menu?
+    pdffitwindow=false,     % window fit to page when opened
+    pdfstartview={FitH},    % fits the width of the page to the window
+    pdftitle={My title},    % title
+    pdfauthor={Author},     % author
+    pdfsubject={Subject},   % subject of the document
+    pdfcreator={Creator},   % creator of the document
+    pdfproducer={Producer}, % producer of the document
+    pdfkeywords={keyword1} {key2} {key3}, % list of keywords
+    pdfnewwindow=true,      % links in new PDF window
+    colorlinks=true,       % false: boxed links; true: colored links
+    linkcolor=black,          % color of internal links (change box color with linkbordercolor)
+    citecolor=green,        % color of links to bibliography
+    filecolor=magenta,      % color of file links
+    urlcolor=cyan           % color of external links
+}
+
+
+\title{}
+\date{}
+\author{}
+
+\begin{document}
+\begin{titlepage}
+\thispagestyle{empty}
+\begin{center}
+Федеральное государственное бюджетное образовательное учреждение высшего профессионального образования \\Московский государственный технический университет имени Н.Э. Баумана
+
+\end{center}
+\bigskip
+\begin{flushleft}
+Факультет: \underline{Информатика и системы управления}\\
+Кафедра: \underline{Теоретическая информатика и компьютерные технологии}
+\end{flushleft}
+\vfill
+\centerline{\large{Лабораторная работа №2}}
+\centerline{\large{по курсу <<Численные методы>>}}
+\centerline{\large{<<Сравнительный анализ методов численного интегрирования>>}}
+\vfill
+\hfill\parbox{5cm} {
+           Выполнила:\\
+           студентка группы ИУ9-62Б \hfill \\
+           Самохвалова П. С.\hfill \medskip\\
+           Проверила:\\
+           Домрачева А. Б.\hfill
+       }
+\centerline{Москва, 2023}
+\clearpage
+\end{titlepage}
+
+\textsc{\textbf{Цель:}}
+
+Обосновать быстродействие одного из алгоритмов: метода центральных прямоугольников, метода трапеций, метода Симпсона по количеству шагов, необходимых для достижения заданной цели $\varepsilon$.
+
+\textsc{\textbf{Постановка задачи:}}
+
+\textbf{Дано:}  $$\int\limits_a^b f(x)\,dx $$
+
+\textbf{Найти:} $$I^{*} \approx  I $$
+
+\textbf{Описание алгоритмов:}\\
+
+\textbf{Метод центральных прямоугольников:}
+
+$$I_{пр}^{*} = h\sum\limits_{i=1}^n f(x_{i - 0.5})$$
+
+\textbf{Метод трапеций:}
+
+$$I_{тр}^{*} = h(\frac{f(a)+f(b)}{2}+\sum\limits_{i=1}^{n-1} f(x_i))$$
+
+\textbf{Метод Симпсона:}
+
+$$I^{*} \approx \frac{h}{6}\sum\limits_{i=1}^n (f(x_{i-1}) + 4f(x_{i-0.5}) + f(x_{i}))$$\\
+
+\textbf{Вычисление интегралов с учётом погрешности:}
+
+$$R = \frac{I_{\frac{h}{2}}^* - I_h^*}{2^k - 1}$$
+
+Для метода прямоугольников и метода трапеций $k = 2$, для метода Симпсона $k = 4$
+
+R - уточнение по Ричардсону
+
+$|R| \leq \varepsilon$ - правило Рунге\\
+
+\textbf{Тестовый пример:}
+
+Вариант 21
+
+$$ I = \int\limits_{0.25}^2 \frac{1}{x + x^2}\,dx $$
+$$\varepsilon = 0.001$$
+
+Листинг 1. Методы численного интегрирования
+\begin{lstlisting}[language=python]
+
+import math
+
+
+def f(x):
+    return 1 / (x + x ** 2)
+
+
+def rectangles_method(f, a, b, n):
+    h = (b - a) / n
+    return h * sum(f(a + (i - 0.5) * h) for i in range(1, n + 1))
+
+
+def trapezoid_method(f, a, b, n):
+    h = (b - a) / n
+    return h * ((f(a) + f(b)) / 2 + sum(f(a + i * h) for i in range(1, n)))
+
+
+def Simpson_method(f, a, b, n):
+    h = (b - a) / n
+    return h / 6 * sum((f(a + (i - 1) * h) + 4 * f(a + (i - 0.5) * h) +
+                        f(a + i * h)) for i in range(1, n + 1))
+
+
+epsilon = 0.001
+a = 0.25
+b = 2
+methods = [rectangles_method, trapezoid_method, Simpson_method]
+methods_names = ["Rectangles method", "Trapezoid method", "Simpson_method"]
+for i in range(len(methods)):
+    if methods[i] == Simpson_method:
+        k = 4
+    else:
+        k = 2
+    n = 1
+    integral = 0
+    r = math.inf
+    while abs(r) >= epsilon:
+        n *= 2
+        integral_last = integral
+        integral = methods[i](f, a, b, n)
+        r = (integral - integral_last) / (2 ** k - 1)
+    print(methods_names[i])
+    print(n)
+    print(integral)
+    print(integral + r)
+    print()
+
+
+\end{lstlisting}
+
+
+\textsc{\textbf{Результаты работы:}}
+
+$$ I = \int\limits_{0.25}^2 \frac{1}{x + x^2}\,dx \approx 1,20397$$
+$$\varepsilon = 0.001$$
+
+Таблица результатов работы программы с использованием перечисленных выше методов:
+
+\begin{center}
+\begin{tabular}{|l|l|l|l|l|}
+    \hline
+    Метод & n & $I^*$ & $I^* + R$\\
+    \hline
+    Метод прямоугольников & 64 & 1.203499650700365 & 1.203968762824301 \\
+    \hline
+    Метод трапеций & 64 & 1.2049199981264607 & 1.2039774368604925 \\
+    \hline
+    Метод Симпсона & 8 & 1.2048584701623828 & 1.2043443424223774 \\
+    \hline
+\end{tabular}
+\end{center}
+
+n - число частей, на которые разбивается отрезок интегрирования
+
+\textbf{Выводы:}
+
+В результате выполнения лабораторной работы были рассмотрены методы численного интегрирования: метод центральных прямоугольников, метод трапеций, метод Симпсона. Была написала реализация каждого из методов на языке программирования python. Также был проведён сравнительный анализ данных методов по количеству шагов, необходимых для достижения заданной цели $\varepsilon$.
+В результате работы программы было получено, что метод центральных прямоугольников и метод трапеций достигают заданной цели $\varepsilon$ при разбиении отрезка интегрирования на 64 равные части, а метод Симпсона - при разбиении отрезка интегрирования на 8 равных частей.
+Можно сделать вывод, что метод Симпсона достигает заданной точности быстрее, чем метод центральных прямоугольников и метод трапеций. А метод центральных прямоугольников и метод трапеций достигают заданной цели $\varepsilon$ за одинаковое количество шагов.
+
+\end{document}

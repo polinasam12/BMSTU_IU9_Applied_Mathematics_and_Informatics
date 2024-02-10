@@ -1,0 +1,219 @@
+\documentclass [12pt]{article}
+
+
+\usepackage{ucs}
+\usepackage[utf8x]{inputenc} %Поддержка UTF8
+\usepackage{cmap} % Улучшенный поиск русских слов в полученном pdf-файле
+\usepackage[english,russian]{babel} %Пакет для поддержки русского и английского языка
+\usepackage{graphicx} %Поддержка графиков
+\usepackage{float} %Поддержка float-графиков
+\usepackage[left=20mm,right=15mm, top=20mm,bottom=20mm,bindingoffset=0cm]{geometry}
+\usepackage{mathtools}
+\usepackage{setspace,amsmath}
+\usepackage{amsmath,amssymb}
+\usepackage{dsfont}
+\usepackage{tabularx}
+\DeclarePairedDelimiter{\abs}{\lvert}{\rvert}
+\renewcommand{\baselinestretch}{1.2}
+
+\usepackage{color}
+\definecolor{deepblue}{rgb}{0,0,0.5}
+\definecolor{deepred}{rgb}{0.6,0,0}
+\definecolor{deepgreen}{rgb}{0,0.5,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+
+\DeclareFixedFont{\ttb}{T1}{txtt}{bx}{n}{12} % for bold
+\DeclareFixedFont{\ttm}{T1}{txtt}{m}{n}{12}  % for normal
+
+\usepackage{listings}
+
+
+\lstset{
+	language=Python,
+	basicstyle=\ttm,
+	otherkeywords={self},             % Add keywords here
+	keywordstyle=\ttb\color{deepblue},
+	emph={MyClass,__init__},          % Custom highlighting
+	emphstyle=\ttb\color{deepred},    % Custom highlighting style
+	stringstyle=\color{deepgreen},
+	frame=tb,                         % Any extra options here
+	showstringspaces=false            %
+}
+
+\usepackage{hyperref}
+\usepackage{wasysym}
+
+\hypersetup{
+    bookmarks=true,         % show bookmarks bar?
+    unicode=false,          % non-Latin characters in Acrobat’s bookmarks
+    pdftoolbar=true,        % show Acrobat’s toolbar?
+    pdfmenubar=true,        % show Acrobat’s menu?
+    pdffitwindow=false,     % window fit to page when opened
+    pdfstartview={FitH},    % fits the width of the page to the window
+    pdftitle={My title},    % title
+    pdfauthor={Author},     % author
+    pdfsubject={Subject},   % subject of the document
+    pdfcreator={Creator},   % creator of the document
+    pdfproducer={Producer}, % producer of the document
+    pdfkeywords={keyword1} {key2} {key3}, % list of keywords
+    pdfnewwindow=true,      % links in new PDF window
+    colorlinks=true,       % false: boxed links; true: colored links
+    linkcolor=black,          % color of internal links (change box color with linkbordercolor)
+    citecolor=green,        % color of links to bibliography
+    filecolor=magenta,      % color of file links
+    urlcolor=cyan           % color of external links
+}
+
+
+\title{}
+\date{}
+\author{}
+
+\begin{document}
+\begin{titlepage}
+\thispagestyle{empty}
+\begin{center}
+Федеральное государственное бюджетное образовательное учреждение высшего профессионального образования \\Московский государственный технический университет имени Н.Э. Баумана
+
+\end{center}
+\bigskip
+\begin{flushleft}
+Факультет: \underline{Информатика и системы управления}\\
+Кафедра: \underline{Теоретическая информатика и компьютерные технологии}
+\end{flushleft}
+\vfill
+\centerline{\large{Лабораторная работа №6}}
+\centerline{\large{по курсу <<Численные методы>>}}
+\centerline{\large{<<Метод наискорейшего спуска поиска минимума функции многих переменных>>}}
+\vfill
+\hfill\parbox{5cm} {
+           Выполнила:\\
+           студентка группы ИУ9-62Б \hfill \\
+           Самохвалова П. С.\hfill \medskip\\
+           Проверила:\\
+           Домрачева А. Б.\hfill
+       }
+\centerline{Москва, 2023}
+\clearpage
+\end{titlepage}
+
+\textsc{\textbf{Цель:}}
+
+Анализ метода наискорейшего спуска поиска минимума функции многих переменных.
+
+\textsc{\textbf{Постановка задачи:}}
+
+\textbf{Дано:}  Функция нескольких переменных $ f(x_{1}, x_{2}, ...,x_{n}) $ и некоторое начальное приближение $ x^{0} = (x_{1}^{0}, ..., x_{n}^{0}). $
+
+\textbf{Найти:} Минимум функции нескольких переменных с заданной точностью.
+
+\textbf{Тестовый пример:}
+
+Вариант 21
+
+$$f(x) = (1 + 2x_1^2 + x_2^2)^\frac{1}{2} + e^{x_1^2 + 2x_2^2} - x_1x_2, \quad x^{0} = (0, 0).$$
+$$\varepsilon = 0.001$$
+
+\textbf{Описание метода:}\\
+
+Пусть для функции $f(x_{1}, x_{2}, ..., x_{n})$ на k-м шаге имеем некоторое приближение к минимуму $x^{k} = (x_{1}^{k},...,x_{n}^{k})$. Рассмотрим функцию одной переменной $$ \varphi_{k}(t) = f(x_{1}^k - t\frac{\partial f}{\partial x_{1}}(x^{k}),...,x_{n}^k - t\frac{\partial f}{\partial x_{n}}(x^{k})) = f(x^{k} - tgradf(x^{k})), $$ где вектор $ gradf(x^{k}) = (\frac{\partial f}{\partial x_{1}}(x^{k}),...,\frac{\partial f}{\partial x_{n}}(x^{k}) ) $ - градиент  функции f в точке $ x^{k}$.
+
+Обозначим точку минимума функции $\varphi_{k}(t)$ через $t^{*}$. Теперь для следующего приближения к точке экстремума полагаем $$ x^{k+1} = x^{k} - t^{*}gradf(x^{k}).$$
+Процесс поиска минимума продолжаем до тех пор, пока $||gradf(x^{k})|| = \max_{1 \leq i \leq n} |\frac{\partial f}{\partial x_{i}}(x^{k})|$ не станет меньше допустимой погрешности $\varepsilon$.
+
+В большинстве случаев точно искать минимум функции $\varphi_{k}(t)$ не нужно и достаточно ограничиться лишь одним приближением. Тогда особенно простым будет вид итерации в двумерном случае $$ (x_{k+1}, y_{k+1}) = (x_{k} - t^{k}\frac{\partial f}{\partial x} , y_{k} - t^{k}\frac{\partial f}{\partial y}) ,$$ где $t^{k} = \frac{\phi_{k}'(0)}{\phi_{k}''(0)}, \quad \phi_{k}'(0) = -(\frac{\partial f}{\partial x})^{2} - (\frac{\partial f}{\partial y})^{2}, \quad \phi_{k}''(0) = \frac{\partial f^{2}}{\partial x^{2}}(\frac{\partial f}{\partial x})^{2} + 2\frac{\partial f^{2}}{\partial x \partial y}\frac{\partial f}{\partial x}\frac{\partial f}{\partial y} + \frac{\partial f^{2}}{\partial y^{2}}(\frac{\partial f}{\partial y})^{2}$, все производные беруться в точке $(x_{k}, y_{k})$.
+
+Листинг 1. Метод наискорейшего спуска поиска минимума функций двух переменных
+
+\begin{lstlisting}[language=python]
+import math
+
+
+def f(x1, x2):
+    return (1 + 2 * x1**2 + x2**2)**0.5 + math.exp(x1**2 + 2 * x2**2) - \
+        x1 * x2
+
+
+def df_dx1(x1, x2):
+    return 2 * x1 * math.exp(x1**2 + 2 * x2**2) + 2 * x1 / \
+        ((2 * x1**2 + x2**2 + 1)**0.5) - x2
+
+
+def df_dx2(x1, x2):
+    return 4 * x2 * math.exp(x1**2 + 2 * x2**2) + x2 / \
+        ((2 * x1**2 + x2**2 + 1)**0.5) - x1
+
+
+def d2f_dx1x1(x1, x2):
+    return 4 * x1**2 * math.exp(x1**2 + 2 * x2**2) - 4 * x1**2 / \
+        ((2 * x1**2 + x2**2 + 1)**1.5) + 2 * math.exp(x1**2 + 2 * x2**2) + \
+        2 / ((2 * x1**2 + x2**2 + 1)**0.5)
+
+
+def d2f_dx2x2(x1, x2):
+    return 16 * x2**2 * math.exp(x1**2 + 2 * x2**2) - x2**2 / \
+        ((2 * x1**2 + x2**2 + 1)**1.5) + 4 * math.exp(x1**2 + 2 * x2**2) + \
+        1 / ((2 * x1**2 + x2**2 + 1)**0.5)
+
+
+def d2f_dx1x2(x1, x2):
+    return 8 * x1 * x2 * math.exp(x1**2 + 2 * x2**2) - 2 * x1 * x2 / \
+        ((2 * x1**2 + x2**2 + 1)**1.5) - 1
+
+
+def mns(xk, yk, eps):
+    k = 0
+    df_dx = df_dx1(xk, yk)
+    df_dy = df_dx2(xk, yk)
+    max_df_dxi = max(abs(df_dx), abs(df_dy))
+
+    while max_df_dxi >= eps:
+        df_dx = df_dx1(xk, yk)
+        df_dy = df_dx2(xk, yk)
+        d2f_dxdx = d2f_dx1x1(xk, yk)
+        d2f_dydy = d2f_dx2x2(xk, yk)
+        d2f_dxdy = d2f_dx1x2(xk, yk)
+        phi1 = -df_dx ** 2 - df_dy ** 2
+        phi2 = d2f_dxdx * df_dx ** 2 + 2 * d2f_dxdy * df_dx * df_dy + \
+               d2f_dydy * df_dy ** 2
+        tk = - phi1 / phi2
+        xk = xk - tk * df_dx
+        yk = yk - tk * df_dy
+        max_df_dxi = max(abs(df_dx), abs(df_dy))
+        k += 1
+
+    return k, xk, yk
+
+
+eps = 0.001
+
+xk = 0
+yk = 0
+
+n, x, y = mns(xk, yk, eps)
+print(n)
+print(x, y)
+
+print()
+
+xk = 1
+yk = 0
+
+n, x, y = mns(xk, yk, eps)
+print(n)
+print(x, y)
+
+\end{lstlisting}
+
+
+\textsc{\textbf{Результаты работы:}}
+
+Если начать итерации из точки (0, 0), заданная точность достигается сразу же, в точке (0, 0).
+
+Если начать итерации из точки (1, 0), заданная точность достигается за 7 итераций, в точке (1.2646227829257956e-05, 1.623834843454447e-05).
+
+\textbf{Выводы:}
+
+В результате выполнения лабораторной работы был изучен метод наискорейшего спуска поиска минимума функции двух переменных, была написала реализация данного метода на языке программирования Python. На тестовом примере было получено, что, начиная итерации из точки (0, 0), заданная точность достигается сразу же, в точке (0, 0). Начиная итерации из точки (1, 0), заданная точность достигается за 7 итераций, в точке (1.2646227829257956e-05, 1.623834843454447e-05).
+
+\end{document}
