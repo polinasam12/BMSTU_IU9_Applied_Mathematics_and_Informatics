@@ -1,0 +1,5 @@
+lexicographic
+constructors = u(1), p(2)
+variables = x, y, z
+p(u(x),u(y)) = u(p(x,y))
+p(p(x,y),z) = p(x,p(y,z))
