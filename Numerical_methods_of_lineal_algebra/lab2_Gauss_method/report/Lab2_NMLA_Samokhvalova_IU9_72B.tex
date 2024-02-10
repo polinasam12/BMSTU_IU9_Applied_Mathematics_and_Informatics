@@ -1,0 +1,344 @@
+\documentclass[a4paper, 14pt]{extarticle}
+
+% Поля
+%--------------------------------------
+\usepackage{geometry}
+\geometry{a4paper,tmargin=2cm,bmargin=2cm,lmargin=3cm,rmargin=1cm}
+%--------------------------------------
+
+
+%Russian-specific packages
+%--------------------------------------
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc} 
+\usepackage[english, main=russian]{babel}
+%--------------------------------------
+
+\usepackage{textcomp}
+
+% Красная строка
+%--------------------------------------
+\usepackage{indentfirst}               
+%--------------------------------------             
+
+
+%Graphics
+%--------------------------------------
+\usepackage{graphicx}
+\graphicspath{ {./images/} }
+\usepackage{wrapfig}
+%--------------------------------------
+
+% Полуторный интервал
+%--------------------------------------
+\linespread{1.3}                    
+%--------------------------------------
+
+%Выравнивание и переносы
+%--------------------------------------
+% Избавляемся от переполнений
+\sloppy
+% Запрещаем разрыв страницы после первой строки абзаца
+\clubpenalty=10000
+% Запрещаем разрыв страницы после последней строки абзаца
+\widowpenalty=10000
+%--------------------------------------
+
+%Списки
+\usepackage{enumitem}
+
+%Подписи
+\usepackage{caption} 
+
+%Гиперссылки
+\usepackage{hyperref}
+
+\hypersetup {
+	unicode=true
+}
+
+%Рисунки
+%--------------------------------------
+\DeclareCaptionLabelSeparator*{emdash}{~--- }
+\captionsetup[figure]{labelsep=emdash,font=onehalfspacing,position=bottom}
+%--------------------------------------
+
+\usepackage{tempora}
+
+%Листинги
+%--------------------------------------
+\usepackage{listings}
+\lstset{
+  basicstyle=\ttfamily\footnotesize, 
+  %basicstyle=\footnotesize\AnkaCoder,        % the size of the fonts that are used for the code
+  breakatwhitespace=false,         % sets if automatic breaks shoulbd only happen at whitespace
+  breaklines=true,                 % sets automatic line breaking
+  captionpos=t,                    % sets the caption-position to bottom
+  inputencoding=utf8,
+  frame=single,                    % adds a frame around the code
+  keepspaces=true,                 % keeps spaces in text, useful for keeping indentation of code (possibly needs columns=flexible)
+  keywordstyle=\bf,       % keyword style
+  numbers=left,                    % where to put the line-numbers; possible values are (none, left, right)
+  numbersep=5pt,                   % how far the line-numbers are from the code
+  xleftmargin=25pt,
+  xrightmargin=25pt,
+  showspaces=false,                % show spaces everywhere adding particular underscores; it overrides 'showstringspaces'
+  showstringspaces=false,          % underline spaces within strings only
+  showtabs=false,                  % show tabs within strings adding particular underscores
+  stepnumber=1,                    % the step between two line-numbers. If it's 1, each line will be numbered
+  tabsize=2,                       % sets default tabsize to 8 spaces
+  title=\lstname                   % show the filename of files included with \lstinputlisting; also try caption instead of title
+}
+%--------------------------------------
+
+%%% Математические пакеты %%%
+%--------------------------------------
+\usepackage{amsthm,amsfonts,amsmath,amssymb,amscd}  % Математические дополнения от AMS
+\usepackage{mathtools}                              % Добавляет окружение multlined
+\usepackage[perpage]{footmisc}
+%--------------------------------------
+
+%--------------------------------------
+%			НАЧАЛО ДОКУМЕНТА
+%--------------------------------------
+
+\begin{document}
+
+%--------------------------------------
+%			ТИТУЛЬНЫЙ ЛИСТ
+%--------------------------------------
+\begin{titlepage}
+\thispagestyle{empty}
+\newpage
+
+
+%Шапка титульного листа
+%--------------------------------------
+\vspace*{-60pt}
+\hspace{-65pt}
+\begin{minipage}{0.3\textwidth}
+\hspace*{-20pt}\centering
+\includegraphics[width=\textwidth]{emblem}
+\end{minipage}
+\begin{minipage}{0.67\textwidth}\small \textbf{
+\vspace*{-0.7ex}
+\hspace*{-6pt}\centerline{Министерство науки и высшего образования Российской Федерации}
+\vspace*{-0.7ex}
+\centerline{Федеральное государственное бюджетное образовательное учреждение }
+\vspace*{-0.7ex}
+\centerline{высшего образования}
+\vspace*{-0.7ex}
+\centerline{<<Московский государственный технический университет}
+\vspace*{-0.7ex}
+\centerline{имени Н.Э. Баумана}
+\vspace*{-0.7ex}
+\centerline{(национальный исследовательский университет)>>}
+\vspace*{-0.7ex}
+\centerline{(МГТУ им. Н.Э. Баумана)}}
+\end{minipage}
+%--------------------------------------
+
+%Полосы
+%--------------------------------------
+\vspace{-25pt}
+\hspace{-35pt}\rule{\textwidth}{2.3pt}
+
+\vspace*{-20.3pt}
+\hspace{-35pt}\rule{\textwidth}{0.4pt}
+%--------------------------------------
+
+\vspace{1.5ex}
+\hspace{-35pt} \noindent \small ФАКУЛЬТЕТ\hspace{80pt} <<Информатика и системы управления>>
+
+\vspace*{-16pt}
+\hspace{47pt}\rule{0.83\textwidth}{0.4pt}
+
+\vspace{0.5ex}
+\hspace{-35pt} \noindent \small КАФЕДРА\hspace{50pt} <<Теоретическая информатика и компьютерные технологии>>
+
+\vspace*{-16pt}
+\hspace{30pt}\rule{0.866\textwidth}{0.4pt}
+  
+\vspace{11em}
+
+\begin{center}
+\Large {\bf Лабораторная работа № 2} \\
+\large {\bf по курсу <<Численные методы линейной алгебры>>} \\
+\large <<Реализация метода Гаусса и оценка погрешностей вычислений>>
+\end{center}\normalsize
+
+\vspace{8em}
+
+
+\begin{flushright}
+  {Студентка группы ИУ9-72Б Самохвалова П. С. \hspace*{15pt}\\
+  \vspace{2ex}
+  Преподаватель Посевин Д. П.\hspace*{15pt}}
+\end{flushright}
+
+\bigskip
+
+\vfill
+ 
+
+\begin{center}
+\textsl{Москва 2023}
+\end{center}
+\end{titlepage}
+%--------------------------------------
+%		КОНЕЦ ТИТУЛЬНОГО ЛИСТА
+%--------------------------------------
+
+\renewcommand{\ttdefault}{pcr}
+
+\setlength{\tabcolsep}{3pt}
+\newpage
+\setcounter{page}{2}
+
+\section{Цель работы}\label{Sect::goal}
+
+Реализовать простейший метод Гаусса и научиться оценивать погрешности решения
+системы уравнения для матриц произвольной размерности.
+
+\section{Задание}\label{Sect::task}
+
+\begin{itemize}
+    \item Реализовать метод Гаусса для действительных квадратных матриц произвольной размерности n. Возможноть быстро менять размерность матрицы n в дальнейшем потребуется для проведения численных экспериментов по оценке скорости выполнения алгоритма и его точности.
+    \item Реализовать возможность ручного ввода элементов матрицы произвольной размерности.
+    \item Реализовать возможность генерации матриц со случайными элементами в заданном диапазоне [-a, b], где a и b принадлежат R. При этом необходимо уметь регулировать условие диагонального преобладания, другими словами реализовать возможность принудительного увеличения на заданный порядок среднее значение генерируемых диагональных элементов $a_{ii}$ матрицы A системы уравнений Aх = b.
+    \item Реализовать алгоритм тестирования задачи, который заключается в том, что мы заведомо определяем значения координат вектора x, данный вектор заведомо является решением уравнения Aх = b, вычисляем b путем прямого перемножения матрицы A на вектор x и далее производим поиск решения уравнения Aх = b методом Гаусса, получая $x_{num}$. После этого производим сравнение полученного $x_{num}$ c заданным x, а также решением $x_{lib}$, полученным с использованием сторонней библиотеки выбранной студеном. При этом сравнение производится по евклидовой норме разности вектора (x - $x_{num}$) и (x - $x_{lib}$).
+\end{itemize}
+
+\section{Практическая реализация}\label{Sect::code}
+
+Исходный код программы представлен в листинге~\ref{lst:code1}.
+
+\begin{lstlisting}[language={python},caption={Метод Гаусса},label={lst:code1}]
+from num_methods import *
+import random
+import numpy as np
+import copy
+
+
+def gauss_method(a, b):
+    n = len(a)
+    for i in range(n):
+        for j in range(i + 1, n):
+            c = - a[j][i] / a[i][i]
+            for k in range(i, n):
+                if k == i:
+                    a[j][k] = 0
+                else:
+                    a[j][k] += c * a[i][k]
+            b[j] += c * b[i]
+    x = [0] * n
+    for i in range(n - 1, -1, -1):
+        x[i] = b[i]
+        for j in range(n - 1, i, -1):
+            x[i] -= x[j] * a[i][j]
+        x[i] /= a[i][i]
+    return x
+
+
+def generate_matrix(n, v1, v2):
+    return [[random.uniform(v1, v2) for i in range(n)] for j in range(n)]
+
+
+def increase_diagonal_elements_to_diagonal_predominance(a):
+    n = len(a)
+    for i in range(n):
+        s = 0
+        for j in range(n):
+            if i != j:
+                s += abs(a[i][j])
+        a[i][i] = s + 1
+    return a
+
+
+def input_matrix():
+    n = int(input())
+    a = []
+    b = []
+    for i in range(n):
+        l = list(map(int, input().split()))
+        a.append(l)
+    for i in range(n):
+        b.append(int(input()))
+    return a, b
+
+
+n = 100
+
+v1 = -100
+v2 = 100
+
+a = generate_matrix(n, v1, v2)
+
+print("Matrix A:")
+for m in a:
+    print(m)
+print()
+
+x = [i for i in range(1, n + 1)]
+b = mult_matr_vec(a, x)
+
+print("Vector b:")
+print(b)
+print()
+
+print("Vector x accurate:")
+print(x)
+print()
+
+x_num = gauss_method(copy.deepcopy(a), copy.copy(b))
+
+print("Vector x_num:")
+print(x_num)
+print()
+
+x_lib = np.linalg.solve(a, b)
+
+print("Vector x_lib:")
+print(x_lib)
+print()
+
+print("Norm of vector ||x - x_num||:")
+print(norm_vec(sub_vec(x, x_num)))
+print()
+
+print("Norm of vector ||x - x_lib||:")
+print(norm_vec(sub_vec(x, x_lib)))
+print()
+
+\end{lstlisting}
+
+\section{Результаты}\label{Sect::res}
+
+Результаты работы программы представлены на рисунках~\ref{fig:img1}~--~\ref{fig:img3}.
+
+\begin{figure}[!htb]
+	\centering
+	\includegraphics[width=0.8\textwidth]{img1}
+\caption{Результат работы программы при n = 10}
+\label{fig:img1}
+\end{figure}
+
+\begin{figure}[!htb]
+	\centering
+	\includegraphics[width=0.8\textwidth]{img2}
+\caption{Результат работы программы при n = 50}
+\label{fig:img2}
+\end{figure}
+
+\begin{figure}[!htb]
+	\centering
+	\includegraphics[width=0.8\textwidth]{img3}
+\caption{Результат работы программы при n = 100}
+\label{fig:img3}
+\end{figure}
+
+\section{Выводы}\label{Sect::conclusion}
+
+В результате выполнения лабораторной работы был реализован метод Гаусса, были оценены погрешности решения системы уравнений для матриц произвольной размерности.
+
+\end{document}
